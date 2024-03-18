@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import dbClient from '../utils/db';
 
-export async function createUser(req, res) {
+export default async function createUser(req, res) {
   const { email, password } = req.body;
 
   if (email === undefined) {
@@ -18,19 +18,15 @@ export async function createUser(req, res) {
   if (user !== null) {
     return res.status(400).json({ error: 'Already exist' });
   }
-  return bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(password, salt, (err, hash) => {
-      if (err) {
-        console.error('Error hashing supplied password');
-        return res.status(500).json({ error: 'Internal Server Error' });
-      }
-      return userCollection.insertOne({ email, password: hash }, (error, result) => {
-        if (error) {
-          console.error('Error encountered when creating new user!');
-          return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        return res.status(201).json({ id: result.insertedId, email });
-      });
-    });
-  });
+
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+
+  try {
+    const result = await userCollection.insertOne({ email, password: hash });
+    return res.status(201).json({ id: result.insertedId, email });
+  } catch (err) {
+    console.error(`Error inserting new user document to collection: ${err}`);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
