@@ -1,39 +1,47 @@
 import passport from 'passport';
+import passportJWT from 'passport-jwt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import { ObjectId } from 'mongodb';
 import dbClient from './db';
-import verifyUser from './verifyUser';
 
-const LocalStrategy = require('passport-local').Strategy;
+dotenv.config();
 
-async function verifyCallback(username, password, done) {
-  const db = dbClient.client.db(dbClient.database);
-  const userCollection = await db.collection('users');
+const { JwtStrategy, ExtractJwt } = passportJWT;
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.SECRET_KEY,
+};
 
-  const user = await userCollection.findOne({ email: username });
-  if (!user) {
-    return done(null, false, { message: 'Incorrect email' });
+async function verifyCallback(jwtPayload, done) {
+  try {
+    const db = dbClient.client.db(dbClient.database);
+    const usersCollection = db.collection('users');
+
+    const id = new ObjectId(jwtPayload.sub);
+    const user = await usersCollection.findOne({ _id: id });
+    if (!user) {
+      return done(null, false);
+    }
+    return done(null, user);
+  } catch (error) {
+    return done(error, false);
   }
-
-  const isValid = await verifyUser(username, password);
-  if (!isValid) {
-    return done(null, false, { message: 'Incorrect password' });
-  }
-  return done(null, user);
 }
 
-const strategy = new LocalStrategy({ usernameField: 'email' }, verifyCallback);
+const strategy = new JwtStrategy(jwtOptions, verifyCallback);
 
 passport.use(strategy);
 
-passport.serializeUser((user, done) => {
-  done(null, user._id);
-});
+function generateToken(user) {
+  const payload = {
+    sub: user._id,
+    email: user.email,
+  };
+  return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
+}
 
-passport.deserializeUser((id, done) => {
-  dbClient.client.collection('users')
-    .then((userCollection) => {
-      userCollection.findOne({ _id: ObjectId(id) }, (err, user) => {
-        done(err, user);
-      });
-    });
-});
+module.exports = {
+  passport,
+  generateToken,
+};
