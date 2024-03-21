@@ -2,7 +2,6 @@ import express from 'express';
 import passport from 'passport';
 import dotenv from 'dotenv';
 import routes from './routes/index';
-import './utils/passport'; // Import the configured Passport.js instance
 
 dotenv.config();
 
