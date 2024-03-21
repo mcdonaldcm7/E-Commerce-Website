@@ -39,10 +39,7 @@ function generateToken(user) {
     sub: user._id,
     email: user.email,
   };
-  return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
+  return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' });
 }
 
-module.exports = {
-  passport,
-  generateToken,
-};
+export { passport, generateToken };
