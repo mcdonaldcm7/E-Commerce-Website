@@ -7,7 +7,8 @@ import dbClient from './db';
 
 dotenv.config();
 
-const { JwtStrategy, ExtractJwt } = passportJWT;
+const JwtStrategy = passportJWT.Strategy;
+const { ExtractJwt } = passportJWT;
 const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.SECRET_KEY,
