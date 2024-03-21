@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import dbClient from '../utils/db';
-import generateToken from '../utils/passport';
+import { generateToken } from '../utils/passport';
 
 export default async function authenticateUser(req, res) {
   const { email, password } = req.body;
@@ -29,7 +29,7 @@ export default async function authenticateUser(req, res) {
     }
     return res.status(401).json({ error: 'Unauthorized' });
   } catch (err) {
-    console.error('Error comparing passwords');
+    console.error('Error encountered: ', err);
     return res.status(503).json({ error: 'Internal Server Error' });
   }
 }
