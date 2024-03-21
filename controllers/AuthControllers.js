@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import dbClient from '../utils/db';
+import generateToken from '../utils/passport';
 
 export default async function authenticateUser(req, res) {
   const { email, password } = req.body;
@@ -23,7 +24,8 @@ export default async function authenticateUser(req, res) {
   try {
     const match = bcrypt.compareSync(password, user.password);
     if (match) {
-      return res.status(200).json({ message: 'Login successful' });
+      const token = generateToken(user);
+      return res.status(200).json({ message: 'Login successful', token });
     }
     return res.status(401).json({ error: 'Unauthorized' });
   } catch (err) {
