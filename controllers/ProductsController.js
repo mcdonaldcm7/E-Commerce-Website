@@ -1,12 +1,19 @@
-import { ObjectId } from 'mongodb';
 import dbClient from '../utils/db';
 
-export async function getProducts(req, res) {
+export default async function getProducts(req, res) {
+  const { productName, productId } = req.query;
   const page = req.query.page || 0;
   const pageSize = 10;
   const skip = page * pageSize;
   const query = {};
 
+  /*
+   * Prevent creating multiple endpoints for all categories by simple attaching the product
+   * category and then redirecting the user to the new request with product category as a query
+   * parameter e.g User visits endpoint 'http://<domain name>/api/products
+   * users clicks on the category 'Electronics', redirect user to the endpoint with query parameter
+   * 'http://<domain name>/api/products?category=Electronics
+   */
   if (req.query.category !== undefined) {
     query.category = req.query.category;
   }
@@ -15,13 +22,22 @@ export async function getProducts(req, res) {
     query.colors = req.query.color;
   }
 
+  if (productName !== undefined) {
+    query.productName = productName;
+  }
+
+  if (productId !== undefined) {
+    query.productId = productId;
+  }
+
   const pipeline = [
     { $match: query },
     { $skip: skip },
     { $limit: pageSize },
   ];
 
-  const productsCollection = dbClient.client.db(dbClient.database).collection('products');
+  const db = dbClient.client.db(dbClient.database);
+  const productsCollection = db.collection('products');
   const products = await productsCollection.aggregate(pipeline).toArray();
 
   const productsList = [];
@@ -31,7 +47,7 @@ export async function getProducts(req, res) {
         id: String(product._id),
         name: product.name,
         price: product.price,
-        category: product.catgory,
+        category: product.category,
         quantity: product.quantity,
       };
 
@@ -49,14 +65,16 @@ export async function getProducts(req, res) {
   return res.json(productsList);
 }
 
-export async function getProductById(req, res) {
+/*
+ * export async function getProductById(req, res) {
   const { productId } = req.params;
 
   if (productId === undefined) {
     return res.status(400).json({ error: 'Invalid product ID supplied' });
   }
 
-  const productsCollection = dbClient.client.db(dbClient.database).collection('products');
+  const db = dbClient.client.db(dbClient.database);
+  const productsCollection = db.collection('products');
   const product = await productsCollection.findOne({ _id: ObjectId(productId) });
 
   if (!product) {
@@ -66,7 +84,7 @@ export async function getProductById(req, res) {
   const temp = {
     name: product.name,
     price: product.price,
-    category: product.catgory,
+    category: product.category,
     quantity: product.quantity,
   };
 
@@ -79,4 +97,5 @@ export async function getProductById(req, res) {
   }
 
   return res.status(200).json(temp);
-}
+ }
+*/
