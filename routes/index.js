@@ -8,7 +8,12 @@ import {
 } from '../controllers/UsersController';
 import getProducts from '../controllers/ProductsController';
 import authenticateUser from '../controllers/AuthControllers';
-import { getCart, addItemToCart } from '../controllers/CartsController';
+import {
+  getCart,
+  addItemToCart,
+  removeItemFromCart,
+  updateItemQty,
+} from '../controllers/CartsController';
 import verifyUserToken from '../utils/verifyUserToken';
 
 const router = express.Router();
@@ -36,7 +41,7 @@ router.get('/products', getProducts);
 // Cart Endpoints
 router.get('/cart', getCart);
 router.patch('/cart/add', addItemToCart);
-// router.patch('/cart/update', updateItemInCart);
-// router.delete('/cart/remove', removeItemInCart);
+router.delete('/cart/remove', removeItemFromCart);
+router.patch('/cart/update', updateItemQty);
 
 export default router;
