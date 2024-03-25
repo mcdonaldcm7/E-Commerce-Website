@@ -80,7 +80,12 @@ export async function addItemToCart(req, res) {
     return res.status(503).json({ error: 'Internal Server Error' });
   }
 
-  cart.push({ id: product._id, name: product.name, qty });
+  cart.push({
+    id: product._id,
+    name: product.name,
+    price: product.price,
+    qty,
+  });
 
   const newCartJson = JSON.stringify(cart);
   const cartCookie = serialize('cart', newCartJson, {
