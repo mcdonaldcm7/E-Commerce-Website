@@ -5,15 +5,21 @@ import {
   resetPasswordToken,
   updatePassword,
   logUserOut,
-} from '../controllers/UsersController';
-import getProducts from '../controllers/ProductsController';
-import authenticateUser from '../controllers/AuthControllers';
+} from '../controllers/UserAuthController';
+import {
+  getProducts,
+  addProduct,
+  removeProduct,
+  editProduct,
+} from '../controllers/ProductsController';
+import { authenticateUser, authorize } from '../controllers/AuthControllers';
 import {
   getCart,
   addItemToCart,
   removeItemFromCart,
   updateItemQty,
 } from '../controllers/CartsController';
+import orderCheckout from '../controllers/OrdersController';
 import verifyUserToken from '../utils/verifyUserToken';
 
 const router = express.Router();
@@ -33,15 +39,35 @@ router.post('/logout', passport.authenticate('jwt', { session: false }), logUser
 
 // Product Endpoints
 router.get('/products', getProducts);
+router.post('/products/add', passport.authenticate('jwt', { sesstion: false }),
+  authorize('admin'),
+  addProduct);
 
-// Unimplemented
-// router.get('/products/:productId/edit', editProduct);
-// router.get('/products/:productId/delete', deleteProduct);
+router.delete('/products/:productId/remove/', passport.authenticate('jwt', { session: false }),
+  authorize('admin'),
+  removeProduct);
+
+router.patch('/products/:productId/edit', passport.authenticate('jwt', { session: false }),
+  authorize('admin'),
+  editProduct);
 
 // Cart Endpoints
 router.get('/cart', getCart);
 router.patch('/cart/add', addItemToCart);
 router.delete('/cart/remove', removeItemFromCart);
 router.patch('/cart/update', updateItemQty);
+
+// Orders Endpoints
+// router.get('/orders', passport.authenticate('jwt', { session: false }), authenticateUser, getOrders);
+// router.get('/orders/:orderId', passport.authenticate('jwt', { session: false }), authenticateUser, getOrder);
+router.get('/orders/checkout', passport.authenticate('jwt', { session: false }),
+  verifyUserToken,
+  authenticateUser,
+  orderCheckout);
+
+// Users Endpoints
+router.get('/users/orders', passport.authenticate('jwt', { session: false }),
+  verifyUserToken,
+  (req, res) => res.status(200).json((req.user.orders || [])));
 
 export default router;
