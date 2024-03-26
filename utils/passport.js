@@ -39,6 +39,11 @@ function generateToken(user) {
     sub: user._id,
     email: user.email,
   };
+  if (user.email === process.env.ADMIN_EMAIL) {
+    payload.role = user.role || 'admin';
+  } else {
+    payload.role = user.role || 'user';
+  }
   return jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' });
 }
 
