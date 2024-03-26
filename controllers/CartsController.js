@@ -56,14 +56,7 @@ export async function addItemToCart(req, res) {
   }
 
   if (!product) {
-    let message;
-
-    if (productName) {
-      message = `Item ${productName} not found`;
-    } else {
-      message = `Product with ID: ${productId} not found`;
-    }
-    return res.status(404).json({ error: message });
+    return res.status(404).json({ error: 'Item not found' });
   }
 
   // Handles case:  Quantity of item in store is insufficient
@@ -84,6 +77,7 @@ export async function addItemToCart(req, res) {
     id: product._id,
     name: product.name,
     price: product.price,
+    EDT: product.EDT,
     qty,
   });
 
