@@ -17,35 +17,45 @@ export default async function orderCheckout(req, res) {
 
   const productList = [];
   const orders = {};
+  const enterpriseOrders = [];
   const userOrders = user.orders || [];
   let totalCost = 0;
+  let maxEDT = 0;
 
   for (const item of cart) {
     const temp = {};
     temp.item = item.name;
     temp.units = item.qty;
     temp.price = item.price;
-
-    totalCost += item.qty * parseFloat(item.price.split('$')[1], 10);
     productList.push(temp);
+
+    temp.orderTime = new Date();
+    temp.deliveryTime = new Date(orders.orderTime.getDate() + item.EDT);
+    temp.total = item.qty * parseFloat(item.price.split('$')[1], 10);
+    enterpriseOrders.push(temp);
+
+    maxEDT = item.EDT > maxEDT ? item.EDT : maxEDT;
+    totalCost += item.qty * parseFloat(item.price.split('$')[1], 10);
   }
 
+  console.log('Compiled user order info is: ', enterpriseOrders);
+
   orders.items = productList;
-  orders.deliveryTime = new Date();
   orders.orderTime = new Date();
-  orders.total = `$${totalCost}`;
+  orders.deliveryTime = new Date(orders.orderTime.getDate() + maxEDT);
+  orders.total = `$${totalCost.toFixed(2)}`;
 
   // Placeholder till queues are implemented
-  orders.deliveryStatus = 'delivered';
+  orders.deliveryStatus = 'pending';
 
   userOrders.push(orders);
 
   const db = dbClient.client.db(dbClient.database);
-  const orderCollection = db.collection('orders');
+  const orderCOllection = db.collection('orders');
   const userCollection = db.collection('users');
 
   try {
-    const orderResult = await orderCollection.insertOne(orders);
+    const orderResult = await orderCollection.insertMany(enterpriseOrders);
     await userCollection.updateOne({ _id: user._id }, { $set: { orders: userOrders } });
 
     return res.status(200).json({ message: `Checkout successful, order ID is ${orderResult.insertedId}` });
