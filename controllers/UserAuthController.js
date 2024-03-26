@@ -1,13 +1,20 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import dotenv from 'dotenv';
 import dbClient from '../utils/db';
 import redisClient from '../utils/redis';
+
+dotenv.config();
 
 export async function createUser(req, res) {
   const { email, password } = req.body;
 
   if (email === undefined) {
     return res.status(400).json({ error: 'Missing email' });
+  }
+
+  if (typeof(email) !== 'string') {
+    return res.status(400).json({ error: 'email must be a string' });
   }
 
   if (password === undefined) {
@@ -26,12 +33,17 @@ export async function createUser(req, res) {
   const hash = bcrypt.hashSync(password, salt);
 
   try {
+    const role = email === process.env.ADMIN_EMAIL ? 'admin' : 'user';
     const result = await userCollection.insertOne({
-      email, password: hash, resetToken: undefined, orderHistory: [], cart: [],
+      email, password: hash, resetToken: undefined, orderHistory: [], cart: [], role,
     });
-    return res.status(201).json({ id: result.insertedId, email });
+    return res.status(201).json({
+      id: result.insertedId,
+      email,
+      message: `${email} has been registered successfully`,
+    });
   } catch (err) {
-    console.error('Error inserting new user document to collection: ', err);
+    console.error(err);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
