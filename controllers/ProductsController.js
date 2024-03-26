@@ -64,38 +64,3 @@ export default async function getProducts(req, res) {
 
   return res.json(productsList);
 }
-
-/*
- * export async function getProductById(req, res) {
-  const { productId } = req.params;
-
-  if (productId === undefined) {
-    return res.status(400).json({ error: 'Invalid product ID supplied' });
-  }
-
-  const db = dbClient.client.db(dbClient.database);
-  const productsCollection = db.collection('products');
-  const product = await productsCollection.findOne({ _id: ObjectId(productId) });
-
-  if (!product) {
-    return res.status(404).json({ error: 'Product not found' });
-  }
-
-  const temp = {
-    name: product.name,
-    price: product.price,
-    category: product.category,
-    quantity: product.quantity,
-  };
-
-  if (product.colors) {
-    temp.colors = product.colors;
-  }
-
-  if (product.sizes) {
-    temp.sizes = product.sizes;
-  }
-
-  return res.status(200).json(temp);
- }
-*/
