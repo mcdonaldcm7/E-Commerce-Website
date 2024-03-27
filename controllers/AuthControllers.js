@@ -2,6 +2,15 @@ import bcrypt from 'bcryptjs';
 import dbClient from '../utils/db';
 import { generateToken } from '../utils/passport';
 
+/*
+ * authenticateUser - Authenticates user credential passed
+ *
+ * @req: Express request object
+ * @res: Express response object
+ * @next: Function to call if available and user has been authenticated
+ *
+ * Return: Prompts depending on wether or not authentication was successful
+ */
 export async function authenticateUser(req, res, next) {
   // Check if user is already authenticated, If so skip and call next()
   if (req.user) {
@@ -23,18 +32,20 @@ export async function authenticateUser(req, res, next) {
   const user = await usersCollection.findOne({ email });
 
   if (!user) {
-    return res.status(401).json({ error: 'Incorrect email' });
+    return res.status(401).json({ error: 'User not found, please check for errors in email' });
   }
 
   try {
     const match = bcrypt.compareSync(password, user.password);
     if (match) {
       const token = generateToken(user);
+
+      res.setHeader('Authorization', `Bearer ${token}`);
       const path = req.originalUrl.split('/').pop();
       if (!['login'].includes(path)) {
         return next();
       }
-      return res.status(200).json({ message: 'Login successful', token });
+      return res.status(200).json({ message: 'Login successful' });
     }
     return res.status(401).json({ error: 'Incorrect Password' });
   } catch (err) {
@@ -43,6 +54,13 @@ export async function authenticateUser(req, res, next) {
   }
 }
 
+/*
+ * authorize - Authorizes permitted user and forbids users without the sufficient role
+ *
+ * @role: Required user role
+ *
+ * Return: Call next() if user.role === role, Otherwise forbids user
+ */
 export function authorize(role) {
   return (req, res, next) => {
     if (req.user && req.user.role === role) {
