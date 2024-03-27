@@ -3,6 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+/*
+ * DBClient: Handles interaction with the mongodb database
+ *
+ * @database: Name of the enterprise' database
+ * @client: MongoClient instance
+ */
 class DBClient {
   constructor() {
     const host = process.env.DB_HOST || 'localhost';
@@ -27,18 +33,46 @@ class DBClient {
     return this.client.isConnected();
   }
 
+  /*
+   * nbUser - Fetches and returns the number of user
+   *
+   * Return: Number of users
+   */
   async nbUsers() {
-    const db = this.client.db(this.database);
-    const usersCount = await db.collection('users').countDocuments();
-    return usersCount;
+    try {
+      const db = this.client.db(this.database);
+      const usersCount = await db.collection('users').countDocuments();
+      return usersCount;
+    } catch (error) {
+      console.error(error);
+      return -1;
+    }
   }
 
+  /*
+   * nbProducts - Fetches and returns the number of products
+   *
+   * Return: Number of products
+   */
   async nbProducts() {
-    const db = this.client.db(this.database);
-    const productsCount = await db.collection('products').countDocuments();
-    return productsCount;
+    try {
+      const db = this.client.db(this.database);
+      const productsCount = await db.collection('products').countDocuments();
+      return productsCount;
+    } catch (error) {
+      console.error(error);
+      return -1;
+    }
   }
 
+  /*
+   * getProduct - Fetches and returns the product using the name and/or the id to compose the query
+   *
+   * @name: Name of product to search for
+   * @id: ID of product to search for
+   *
+   * Return: Product corresponding to the specified arguments passed
+   */
   async getProduct(name, id) {
     const db = this.client.db(this.database);
     const query = {};
@@ -64,6 +98,15 @@ class DBClient {
     }
   }
 
+  /*
+   * getProductQty - Fetches and returns the product quantity using the name and/or the id to
+   * compose the query
+   *
+   * @name: Name of product to search for
+   * @id: ID of product to search for
+   *
+   * Return: Quantity of the product corresponding to the specified arguments passed
+   */
   async getProductQty(name, id) {
     const db = this.client.db(this.database);
     const query = {};
@@ -91,6 +134,14 @@ class DBClient {
     }
   }
 
+  /*
+   * updateProductQuantity - Updates the quantity of the product specified by the name and/or the id
+   *
+   * @name: Name of product to search for
+   * @id: ID of product to search for
+   *
+   * Return: Error on failure, Otherwise, a success prompt
+   */
   async updateProductQuantity(name, id, newQuantity) {
     const db = this.client.db(this.database);
     const productCollection = db.collection('products');
