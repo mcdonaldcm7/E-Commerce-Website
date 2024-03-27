@@ -13,7 +13,7 @@ export async function createUser(req, res) {
     return res.status(400).json({ error: 'Missing email' });
   }
 
-  if (typeof(email) !== 'string') {
+  if (typeof email !== 'string') {
     return res.status(400).json({ error: 'email must be a string' });
   }
 
@@ -49,14 +49,19 @@ export async function createUser(req, res) {
 }
 
 export async function resetPasswordToken(req, res) {
-  const { email } = req.user;
+  const { email } = req.body;
 
   if (!email) {
-    return res.status(401).send({ message: 'Unauthorized' });
+    return res.status(400).json({ message: 'Missing email' });
   }
 
   const db = dbClient.client.db(dbClient.database);
   const userCollection = db.collection('users');
+
+  const user = await userCollection.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ error: 'User not found' });
+  }
 
   const resetToken = crypto.randomBytes(32).toString('hex');
   await userCollection.updateOne({ email }, { $set: { resetToken } });
