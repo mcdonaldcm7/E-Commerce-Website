@@ -1,14 +1,31 @@
 import dbClient from '../utils/db';
 
+/*
+ * getProducts - Returns a list of the products available in the store. Exact pages can be requested
+ * using query parameters
+ *
+ * @req: Express request object
+ * @res: Express response object
+ *
+ * Return: List of products in the inventory
+ */
 export default async function getProducts(req, res) {
   const { productName, productId } = req.query;
-  const page = parseInt(req.query.page, 10) || 0;
+  let page = parseInt(req.query.page, 10) || 0;
 
   if (Number.isNaN(page)) {
     return res.status(400).json({ error: 'Page should be a valid number' });
   }
 
   const pageSize = 10;
+  // Returns the last populated page if the requested page is empty
+  try {
+    const numProducts = await dbClient.nbProducts();
+    page = ((page * pageSize) > numProducts) ? Math.floor(numProducts / pageSize) : page;
+  } catch (error) {
+    console.error(error);
+    return res.status(503).json({ error: 'Internal Server Error' });
+  }
   const skip = page * pageSize;
   const query = {};
 
@@ -33,16 +50,6 @@ export default async function getProducts(req, res) {
 
   if (productId !== undefined) {
     query.productId = productId;
-  }
-
-  try {
-    const numProducts = await dbClient.nbProducts();
-    if ((page * pageSize) < numProducts) {
-      return res.status(200).json({ error: 'No product on this page' });
-    }
-  } catch (error) {
-    console.error(error);
-    return res.status(503).json({ error: 'Internal Server Error' });
   }
 
   const pipeline = [
