@@ -22,15 +22,15 @@ export async function addProduct(req, res) {
     } else if (!description) {
       missing = 'description';
     } else {
-      missing = 'EDT (Expected Delivery Time)'
+      missing = 'EDT (Expected Delivery Time)';
     }
     return res.status(400).json({ error: `Product details supplied missing ${missing}` });
   }
 
-  quantity = parseInt(req.body.quantity);
-  EDT = parseInt(req.body.EDT);
-  if (isNaN(quantity) || isNaN(EDT)) {
-    const wrongType = isNaN(quantity) ? 'quantity' : 'EDT (Expected Delivery Time)';
+  quantity = parseInt(req.body.quantity, 10);
+  EDT = parseInt(req.body.EDT, 10);
+  if (Number.isNaN(quantity) || Number.isNaN(EDT)) {
+    const wrongType = Number.isNaN(quantity) ? 'quantity' : 'EDT (Expected Delivery Time)';
     return res.status(400).json({ error: `${wrongType} should be a number` });
   }
 
@@ -100,10 +100,39 @@ export async function editProduct(req, res) {
   }
 }
 
-export async function getOrders {
+export async function getOrders(req, res) {
+  const { productName } = req.query;
+  const { page } = req.query.page || 0;
+
+  if (Number.isNaN(page)) {
+    return res.status(400).json({ error: 'Page must be a valid number' });
+  }
+
+  const pageSize = 10;
+  const skip = page * pageSize;
+  const query = {};
+
+  if (productName !== undefined) {
+    query.name = productName;
+  }
+
+  const pipeline = [
+    { $match: query },
+    { $skip: skip },
+    { $limit: pageSize },
+  ];
+
+  try {
+    const db = dbClient.client.db(dbClient.database);
+    const orderCollection = db.collection('orders');
+    return await orderCollection.agregate(pipeline).toArray();
+  } catch (error) {
+    console.error(error);
+    return res.status(503).json({ error: 'Internal Server Error' });
+  }
 }
 
-export async function getOrder {
+export async function getOrder(req, res) {
   const { orderId } = req.params;
 
   if (!orderId) {
