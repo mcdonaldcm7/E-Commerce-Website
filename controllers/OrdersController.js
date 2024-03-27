@@ -8,7 +8,7 @@ export default async function orderCheckout(req, res) {
   const { user } = req;
 
   if (!user) {
-    throw new Error('Skipped two modes of authentication, user is ', user);
+    throw new Error('Unauthenticated user granted access: ', user);
   }
 
   if (cart.length === 0) {
@@ -51,7 +51,7 @@ export default async function orderCheckout(req, res) {
   userOrders.push(orders);
 
   const db = dbClient.client.db(dbClient.database);
-  const orderCOllection = db.collection('orders');
+  const orderCollection = db.collection('orders');
   const userCollection = db.collection('users');
 
   try {
