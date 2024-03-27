@@ -1,27 +1,31 @@
 import express from 'express';
 import { passport } from '../utils/passport';
+import { authenticateUser, authorize } from '../controllers/AuthControllers';
+import getProducts from '../controllers/ProductsController';
+import orderCheckout from '../controllers/OrdersController';
+import verifyUserToken from '../utils/verifyUserToken';
+
 import {
   createUser,
   resetPasswordToken,
   updatePassword,
   logUserOut,
 } from '../controllers/UserAuthController';
-import getProducts from '../controllers/ProductsController';
-import { addProduct,
+
+import {
+  addProduct,
   removeProduct,
   editProduct,
   getOrders,
   getOrder,
 } from '../controllers/AdminController';
-import { authenticateUser, authorize } from '../controllers/AuthControllers';
+
 import {
   getCart,
   addItemToCart,
   removeItemFromCart,
   updateItemQty,
 } from '../controllers/CartsController';
-import orderCheckout from '../controllers/OrdersController';
-import verifyUserToken from '../utils/verifyUserToken';
 
 const router = express.Router();
 
@@ -32,9 +36,7 @@ router.post('/register', createUser);
 
 router.post('/login', authenticateUser);
 
-router.get('/reset_password', passport.authenticate('jwt', { session: false }),
-  verifyUserToken,
-  resetPasswordToken);
+router.get('/reset_password', resetPasswordToken);
 
 router.post('/update_password', passport.authenticate('jwt', { session: false }),
   verifyUserToken,
