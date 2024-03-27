@@ -2,7 +2,12 @@ import dbClient from '../utils/db';
 
 export default async function getProducts(req, res) {
   const { productName, productId } = req.query;
-  const page = req.query.page || 0;
+  const page = parseInt(req.query.page, 10) || 0;
+
+  if (Number.isNaN(page)) {
+    return res.status(400).json({ error: 'Page should be a valid number' });
+  }
+
   const pageSize = 10;
   const skip = page * pageSize;
   const query = {};
@@ -28,6 +33,16 @@ export default async function getProducts(req, res) {
 
   if (productId !== undefined) {
     query.productId = productId;
+  }
+
+  try {
+    const numProducts = await dbClient.nbProducts();
+    if ((page * pageSize) < numProducts) {
+      return res.status(200).json({ error: 'No product on this page' });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(503).json({ error: 'Internal Server Error' });
   }
 
   const pipeline = [
