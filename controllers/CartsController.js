@@ -1,11 +1,35 @@
 import { parse, serialize } from 'cookie';
 import dbClient from '../utils/db';
 
+/*
+ * getCart - Returns a list of the items in the user's cart
+ *
+ * @req: Express request object
+ * @res: Express response object
+ *
+ * Return: List of items in user's cart
+ */
 export async function getCart(req, res) {
   const cookies = parse(req.headers.cookie || '');
   const cartJSON = cookies.cart || '[]';
-  const cart = JSON.parse(cartJSON);
+  let cart = null;
 
+  try {
+    cart = JSON.parse(cartJSON);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+  for (const item of cart) {
+    const cost = parseFloat(item.price.split('$')[1]);
+    const total = cost * item.qty;
+    const currentDate = new Date();
+
+    const deliveryDate = new Date(currentDate);
+    item.EDT = new Date(deliveryDate.setDate(currentDate.getDate() + item.EDT)).toString();
+    item.total = `$${total.toFixed(2)}`;
+  }
   return res.json(cart);
 }
 
@@ -14,8 +38,8 @@ export async function getCart(req, res) {
  *
  * @req: Request Argument containing the query object within which the query parameters
  * productName, productId, and qty may be found
- *
  * @res: Response object to populate with reponses
+ *
  * Return: Populated res object
  */
 export async function addItemToCart(req, res) {
@@ -25,12 +49,12 @@ export async function addItemToCart(req, res) {
 
   // Handles case: Item not added in cart and negative number requested
   if (qty < 1) {
-    return res.status(404).json({ error: 'Invalid number of item units requested' });
+    return res.status(400).json({ error: 'Invalid number of item units requested' });
   }
 
   // Handles case: Insufficient item information supplied to compose query
   if (!productName && !productId) {
-    return res.status(404).json({
+    return res.status(400).json({
       error: 'Unable to compose query, Insufficient item information supplied',
     });
   }
@@ -52,7 +76,7 @@ export async function addItemToCart(req, res) {
   } catch (error) {
     console.error(`Error encountered in attempting to find product with query {${productName}, ${productId}}`);
     console.error(error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 
   if (!product) {
@@ -69,8 +93,8 @@ export async function addItemToCart(req, res) {
   try {
     await dbClient.updateProductQuantity(productName, productId, (product.quantity - qty));
   } catch (error) {
-    console.error('Error encountered in attempting to update item quantity: ', error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 
   cart.push({
@@ -99,7 +123,7 @@ export async function removeItemFromCart(req, res) {
 
   // Handles case: Insufficient item information supplied to compose query
   if (!productName && !productId) {
-    return res.status(404).json({
+    return res.status(400).json({
       error: 'Unable to compose query, Insufficient item information supplied',
     });
   }
@@ -109,9 +133,9 @@ export async function removeItemFromCart(req, res) {
   try {
     product = await dbClient.getProduct(productName, productId);
   } catch (error) {
-    console.error(`Error encountered in attempting to find product with query {${productName}, ${productId}}`);
     console.error(error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 
   if (!product) {
@@ -127,28 +151,28 @@ export async function removeItemFromCart(req, res) {
 
   const cookies = parse(req.headers.cookie || '');
   const cartJSON = cookies.cart || '[]';
-  let cart = JSON.parse(cartJSON);
+  const cart = JSON.parse(cartJSON);
   let itemFound = false;
 
   try {
     let cartQty = 0;
     for (const i in cart) {
-      if (cart[i].name === productName || cart[i].id === productId) {
+      if (cart[i].name === productName || (productId !== undefined && cart[i].id === productId)) {
         // Remove item from cart and add quantity back to the product in the database
         cartQty = cart[i].qty;
-        cart = cart.splice(i, i);
+        cart.splice(i, 1);
         itemFound = true;
       }
     }
 
     if (!itemFound) {
-      return res.status(400).json({ error: 'Item not found in cart' });
+      return res.status(404).json({ error: 'Item not found in cart' });
     }
 
     await dbClient.updateProductQuantity(productName, productId, (product.quantity + cartQty));
   } catch (error) {
     console.error('Error encountered in attempting to update item quantity: ', error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 
   const newCartJson = JSON.stringify(cart);
@@ -175,7 +199,7 @@ export async function updateItemQty(req, res) {
 
   // Validate the presence of at least one of the two product identifiers
   if (!productName && !productId) {
-    return res.status(404).json({ error: 'Missing product information to make query' });
+    return res.status(400).json({ error: 'Missing product information to make query' });
   }
 
   let product;
@@ -184,7 +208,7 @@ export async function updateItemQty(req, res) {
   } catch (error) {
     console.error(`Error encountered in attempting to find product with query {${productName}, ${productId}}`);
     console.error(error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 
   if (!product) {
@@ -208,6 +232,7 @@ export async function updateItemQty(req, res) {
       if (cart[i].id.toString() === product._id.toString() || cart[i].name === product.name) {
         newQuantity = product.quantity - qty;
         cart[i].qty += qty;
+
         if (cart[i].qty <= 0) {
           cart = cart.splice(i, i);
         }
@@ -223,7 +248,7 @@ export async function updateItemQty(req, res) {
     await dbClient.updateProductQuantity(product.name, product.id, newQuantity);
   } catch (error) {
     console.error('Error encountered updating product quantity: ', error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 
   const newCartJson = JSON.stringify(cart);
