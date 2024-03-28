@@ -124,6 +124,10 @@ export async function updatePassword(req, res) {
     return res.status(400).json({ error: 'New password not supplied' });
   }
 
+  if (newPassword.length < 14) {
+    return res.status(400).json({ error: 'Password length must be at least 14' });
+  }
+
   const db = dbClient.client.db(dbClient.database);
   const userCollection = db.collection('users');
   let user = null;
