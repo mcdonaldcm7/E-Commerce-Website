@@ -2,7 +2,7 @@ import express from 'express';
 import { passport } from '../utils/passport';
 import { authenticateUser, authorize } from '../controllers/AuthControllers';
 import getProducts from '../controllers/ProductsController';
-import orderCheckout from '../controllers/OrdersController';
+import { orderCheckout, getUserOrderHistory, getUserOrder } from '../controllers/OrdersController';
 import verifyUserToken from '../utils/verifyUserToken';
 
 import {
@@ -29,8 +29,6 @@ import {
 
 const router = express.Router();
 
-router.get('/', (req, res) => res.json({ message: 'Welcome to the Home Page' }));
-
 // Authentication Endpoints
 router.post('/register', createUser);
 
@@ -38,9 +36,7 @@ router.post('/login', authenticateUser);
 
 router.get('/reset_password', resetPasswordToken);
 
-router.post('/update_password', passport.authenticate('jwt', { session: false }),
-  verifyUserToken,
-  updatePassword);
+router.patch('/update_password', updatePassword);
 
 router.post('/logout', passport.authenticate('jwt', { session: false }), logUserOut);
 
@@ -67,9 +63,13 @@ router.get('/admin/orders/:orderId', passport.authenticate('jwt', { session: fal
   authorize('admin'),
   getOrder);
 
+router.get('/admin/orders/user/:email', passport.authenticate('jwt', { session: false }),
+  authorize('admin'),
+  getUserOrder);
+
 // Cart Endpoints
 router.get('/cart', getCart);
-router.patch('/cart/add', addItemToCart);
+router.post('/cart/add', addItemToCart);
 router.delete('/cart/remove', removeItemFromCart);
 router.patch('/cart/update', updateItemQty);
 
@@ -82,6 +82,6 @@ router.get('/orders/checkout', passport.authenticate('jwt', { session: false }),
 // Users Endpoints
 router.get('/users/orders', passport.authenticate('jwt', { session: false }),
   verifyUserToken,
-  (req, res) => res.status(200).json((req.user.orders || [])));
+  getUserOrderHistory);
 
 export default router;
