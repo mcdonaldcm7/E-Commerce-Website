@@ -54,14 +54,19 @@ export async function addProduct(req, res) {
     const db = dbClient.client.db(dbClient.database);
     const productCollection = db.collection('products');
 
+    const product = await productCollection.findOne({ name });
+    if (product) {
+      return res.status(400).json({ error: `Product ${product.name} already exists` });
+    }
+
     const result = await productCollection.insertOne(newProduct);
     return res.status(201).json({
       message: 'New product added successfully',
       id: result.insertedId,
     });
   } catch (error) {
-    console.error('Error encountered in addProduct, ', error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
@@ -75,8 +80,8 @@ export async function removeProduct(req, res) {
     await productCollection.deleteOne({ _id: new ObjectId(productId) });
     return res.status(200).json({ message: 'Item removed successfully' });
   } catch (error) {
-    console.error('Error encountered in removeProduct, ', error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
@@ -95,14 +100,14 @@ export async function editProduct(req, res) {
     await productCollection.updateOne({ _id: new ObjectId(productId) }, { $set: req.body });
     return res.status(200).json({ message: 'Item updated successfully' });
   } catch (error) {
-    console.error('Error encountered in removeProduct, ', error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    console.error(error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
 export async function getOrders(req, res) {
   const { productName } = req.query;
-  const { page } = req.query.page || 0;
+  const page = req.query.page || 0;
 
   if (Number.isNaN(page)) {
     return res.status(400).json({ error: 'Page must be a valid number' });
@@ -125,10 +130,11 @@ export async function getOrders(req, res) {
   try {
     const db = dbClient.client.db(dbClient.database);
     const orderCollection = db.collection('orders');
-    return await orderCollection.agregate(pipeline).toArray();
+    const orders = await orderCollection.aggregate(pipeline).toArray();
+    return res.status(200).json(orders);
   } catch (error) {
     console.error(error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
@@ -147,6 +153,6 @@ export async function getOrder(req, res) {
     return res.status(200).json(order);
   } catch (error) {
     console.error(error);
-    return res.status(503).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
 }
