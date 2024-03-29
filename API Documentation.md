@@ -5,7 +5,7 @@ and password to register *{ "email": "<user's email>, "password": "<user's passw
 function of this endpoint as the name implies is to register the user i.e add the username and an
 encryption of the their password to the database.
 *Note: This endpoint makes validation of only the format of email address supplied and not the domain*
-## Illustration:
+### Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "password": "flexible164214" }' "0.0.0.0:5000/api/register" -v; echo ""
 	Note: Unnecessary use of -X or --request, POST is already inferred.
 	\*   Trying 0.0.0.0:5000...
@@ -30,10 +30,11 @@ encryption of the their password to the database.
 	\* Connection #0 to host 0.0.0.0 left intact
 	{"id":"6604173abbdae28299bb3f99","email":"mcdonald@Email.com","message":"mcdonald@Email.com has been registered successfully"}
 
+
 - **/login (Method Type: POST)**: Authenticates the user credentials supplied in the *json* body and
 generates a session token for the user. The session token is set in the headers and can be used to
 authenticate the user in subsequent login and avoid the continuous need to send vital information.
-## Illustration:
+### Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "password": "flexible164214" }' "0.0.0.0:5000/api/login" -v; echo ""
 	Note: Unnecessary use of -X or --request, POST is already inferred.
 	\*   Trying 0.0.0.0:5000...
@@ -59,9 +60,10 @@ authenticate the user in subsequent login and avoid the continuous need to send 
 	\* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Login successful"}
 
+
 - **/reset_password (Method Type GET)**: Generates and returns a reset password token which is used to reset the
 user password.
-## Illustration
+### Illustration
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XGET -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com" }' "0.0.0.0:5000/api/reset_password" -v; echo ""
 	\*   Trying 0.0.0.0:5000...
 	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
@@ -85,10 +87,11 @@ user password.
 	\* Connection #0 to host 0.0.0.0 left intact
 	{"email":"mcdonald@Email.com","resetToken":"7c7f0b8615c6d1bb2259af2c3d3bb86d12f57f166f447658ab6d4f4f11ce58b0"}
 
+
 - **/update_password (Method Type POST)**: From the information passed in the *json* body, this endpoint validates
 the reset password token supplied and updates the user password to the one supplied.
 *Note: Expected form of json body: { "email": "<EMAIL>", "resetToken": "<RESET TOKEN>", "newPassword": "<New Password>" }*
-## Illustration:
+### Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPATCH -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "resetToken": "7c7f0b8615c6d1bb2259af2c3d3bb86d12f57f166f447658ab6d4f4f11ce58b0", "newPassword": "newFlexiblePassword164214" }' "0.0.0.0:5000/api/update_password" -v; echo ""
 	\*   Trying 0.0.0.0:5000...
 	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
@@ -140,7 +143,9 @@ the reset password token supplied and updates the user password to the one suppl
 	\* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Login successful"}
 
+
 - **/logout (Method Type: POST)**: Invalidate the user's session token and nullifies its use via blacklisting
+
 
 - **/products (Method Type: GET)**: Returns the list of products available in pages, 10 items per page.
 By default, if no page number is supplied via the query parameter *page*, the first page is returned.
@@ -191,8 +196,10 @@ information supplied in the *json* body after successfully authenticating and au
 	  }
 	]
 
+
 - **/admin/products/:productId/remove (Method Type: DELETE)**: Removes a productcorresponding to the
 supplied productId
+
 
 - **/admin/products/:productId/edit (Method Type: PATCH)**: Updates the product with the information
 supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "color", "sizes", "category" }* 
@@ -271,6 +278,7 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 	  }
 	]
 
+
 - **/cart/add (Method Type: POST)**: Adds an item to the user's cart, information about the item
 and quantity should be passed via query to the parameters *productName* and *qty*
 *Form: http://0.0.0.0:5000/api/cart/add?productName=<NAME_OF_PRODUCT>&qty=<QUANTITY>*
@@ -296,6 +304,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	< 
 	\* Connection #0 to host 0.0.0.0 left intact
 	Cart item added successfully
+
 
 - **/cart (Method Type: GET)**: Retrieve and return the user cart information
 ## Illustration:
@@ -323,6 +332,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	\* Connection #0 to host 0.0.0.0 left intact
 	[{"id":"66049d3f4e634d355316e9f2","name":"PlayStation 6","price":"$599.99","EDT":"Fri Mar 29 2024 05:45:29 GMT+0100 (West Africa Standard Time)","qty":2,"total":"$1199.98"}]
 
+
 - **/cart/remove (Method Type: DELETE)**: Removes an item from the users cart and updates the cart information.
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XDELETE -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM" -b "cart=%5B%7B%22id%22%3A%2265f96cd767fdfc4d76005491%22%2C%22name%22%3A%22Sandals%22%2C%22price%22%3A%22%247.99%22%2C%22qty%22%3A3%7D%5D" "0.0.0.0:5000/api/cart/remove?productName=Sandals" -v; echo ""
@@ -347,6 +357,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	< 
 	\* Connection #0 to host 0.0.0.0 left intact
 	Cart item removed successfully
+
 
 - **/cart/update (Method Type: PATCH)**: Updates the items in a users cart.
 ## Illustration:
@@ -377,9 +388,11 @@ and quantity should be passed via query to the parameters *productName* and *qty
 endpoint organizes the items in the user's cart and stores them in the databse, to be available to
 the user via the */users/orders* endpoint
 
+
 - **/user/orders (Method Type)**: Returns the order history of the currently authenticated user,
 this endpoint has pagination functionality, hence the order history can be navigated by passing a
 *page* in the query parameter
+
 
 - **/admin/order (Method Type: GET)**: Provides a list of all user orders with pagination (10 orders by page).
 A *page* query parameter can be used to skip orders
@@ -408,6 +421,7 @@ A *page* query parameter can be used to skip orders
 	[{"_id":"660563e89dd40962a5d77e55","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:34:48.400Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96},{"_id":"660563e89dd40962a5d77e56","item":"MiFi","units":1,"price":"$9.99","orderTime":"2024-03-28T12:34:48.400Z","deliveryTime":"2024-03-29T12:34:48.400Z","total":9.99},{"_id":"660564e9e5baf661f215bc5c","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:39:05.263Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96},{"_id":"660564e9e5baf661f215bc5d","item":"MiFi","units":1,"price":"$9.99","orderTime":"2024-03-28T12:39:05.263Z","deliveryTime":"2024-03-29T12:39:05.263Z","total":9.99},{"_id":"660565d247565937a1ffafc0","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:42:58.543Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96},{"_id":"660565d247565937a1ffafc1","item":"MiFi","units":1,"price":"$9.99","orderTime":"2024-03-28T12:42:58.543Z","deliveryTime":"2024-03-29T12:42:58.543Z","total":9.9* Connection #0 to host 0.0.0.0 left intact
 	9},{"_id":"6605662afe8bbddb29fde73a","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:44:26.440Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96},{"_id":"6605662afe8bbddb29fde73b","item":"MiFi","units":1,"price":"$9.99","orderTime":"2024-03-28T12:44:26.440Z","deliveryTime":"2024-03-29T12:44:26.440Z","total":9.99},{"_id":"6605665e534ac0045922368a","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:45:18.764Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96},{"_id":"6605665e534ac0045922368b","item":"MiFi","units":1,"price":"$9.99","orderTime":"2024-03-28T12:45:18.764Z","deliveryTime":"2024-03-29T12:45:18.764Z","total":9.99}]
 
+
 - **/admin/orders/:orderId (Method Type: GET)**: Returns the order information of the order
 corresponding to the orderId passed
 ## Illustration
@@ -434,6 +448,7 @@ corresponding to the orderId passed
 	< 
 	\* Connection #0 to host 0.0.0.0 left intact
 	{"_id":"660563e89dd40962a5d77e55","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:34:48.400Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96}
+
 
 - **/admin/orders/user/:email (Method Type: GET)**: Returns the order history information of the user
 account belonging to the email passed
