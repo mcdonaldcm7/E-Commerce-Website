@@ -27,6 +27,13 @@ export async function addProduct(req, res) {
     return res.status(400).json({ error: `Product details supplied missing ${missing}` });
   }
 
+  const priceVal = price[0] === '$' ? price.split('$')[1] : price;
+  if (Number.isNaN(parseInt(priceVal, 10))) {
+    return res.status(400).json(
+      { error: 'Price must be a valid non-negative vallue' },
+    );
+  }
+
   quantity = parseInt(req.body.quantity, 10);
   EDT = parseInt(req.body.EDT, 10);
   if (Number.isNaN(quantity) || Number.isNaN(EDT)) {
