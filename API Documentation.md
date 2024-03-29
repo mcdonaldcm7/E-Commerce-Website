@@ -61,6 +61,7 @@ authenticate the user in subsequent login and avoid the continuous need to send 
 
 - **/reset_password (Method Type GET)**: Generates and returns a reset password token which is used to reset the
 user password.
+## Illustration
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XGET -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com" }' "0.0.0.0:5000/api/reset_password" -v; echo ""
 	\*   Trying 0.0.0.0:5000...
 	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
