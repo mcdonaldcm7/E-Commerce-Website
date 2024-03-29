@@ -281,7 +281,6 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 
 - **/cart/add (Method Type: POST)**: Adds an item to the user's cart, information about the item
 and quantity should be passed via query to the parameters *productName* and *qty*
-*Form: http://0.0.0.0:5000/api/cart/add?productName=<NAME_OF_PRODUCT>&qty=<QUANTITY>*
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM" "0.0.0.0:5000/api/cart/add?productName=PlayStation+6&qty=2" -v; echo ""
 	\*   Trying 0.0.0.0:5000...
