@@ -8,8 +8,8 @@ encryption of the their password to the database.
 ### Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "password": "flexible164214" }' "0.0.0.0:5000/api/register" -v; echo ""
 	Note: Unnecessary use of -X or --request, POST is already inferred.
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> POST /api/register HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -17,7 +17,7 @@ encryption of the their password to the database.
 	> Content-Type: application/json
 	> Content-Length: 63
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 201 Created
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -27,7 +27,7 @@ encryption of the their password to the database.
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"id":"6604173abbdae28299bb3f99","email":"mcdonald@Email.com","message":"mcdonald@Email.com has been registered successfully"}
 
 
@@ -37,8 +37,8 @@ authenticate the user in subsequent login and avoid the continuous need to send 
 ### Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "password": "flexible164214" }' "0.0.0.0:5000/api/login" -v; echo ""
 	Note: Unnecessary use of -X or --request, POST is already inferred.
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> POST /api/login HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -46,7 +46,7 @@ authenticate the user in subsequent login and avoid the continuous need to send 
 	> Content-Type: application/json
 	> Content-Length: 63
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjA0MTczYWJiZGFlMjgyOTliYjNmOTkiLCJlbWFpbCI6Im1jZG9uYWxkQEVtYWlsLmNvbSIsImlhdCI6MTcxMTU0NDcxMCwiZXhwIjoxNzExNjMxMTEwfQ.W6gKi3q7ii1pk16bp5b2GzkGnUGBSs9I0XgJe0K3V1A
@@ -57,7 +57,7 @@ authenticate the user in subsequent login and avoid the continuous need to send 
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Login successful"}
 
 
@@ -65,8 +65,8 @@ authenticate the user in subsequent login and avoid the continuous need to send 
 user password.
 ### Illustration
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XGET -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com" }' "0.0.0.0:5000/api/reset_password" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> GET /api/reset_password HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -74,7 +74,7 @@ user password.
 	> Content-Type: application/json
 	> Content-Length: 33
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -84,7 +84,7 @@ user password.
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"email":"mcdonald@Email.com","resetToken":"7c7f0b8615c6d1bb2259af2c3d3bb86d12f57f166f447658ab6d4f4f11ce58b0"}
 
 
@@ -93,8 +93,8 @@ the reset password token supplied and updates the user password to the one suppl
 *Note: Expected form of json body: { "email": "<EMAIL>", "resetToken": "<RESET TOKEN>", "newPassword": "<New Password>" }*
 ### Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPATCH -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "resetToken": "7c7f0b8615c6d1bb2259af2c3d3bb86d12f57f166f447658ab6d4f4f11ce58b0", "newPassword": "newFlexiblePassword164214" }' "0.0.0.0:5000/api/update_password" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> PATCH /api/update_password HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -102,7 +102,7 @@ the reset password token supplied and updates the user password to the one suppl
 	> Content-Type: application/json
 	> Content-Length: 159
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -112,7 +112,7 @@ the reset password token supplied and updates the user password to the one suppl
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Password changed successfully"}
 
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "password": "flexible164214" }' "0.0.0.0:5000/api/login"; echo ""
@@ -120,8 +120,8 @@ the reset password token supplied and updates the user password to the one suppl
 
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Content-Type: application/json" -d '{ "email": "mcdonald@Email.com", "password": "newFlexiblePassword164214" }' "0.0.0.0:5000/api/login" -v; echo ""
 	Note: Unnecessary use of -X or --request, POST is already inferred.
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> POST /api/login HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -129,7 +129,7 @@ the reset password token supplied and updates the user password to the one suppl
 	> Content-Type: application/json
 	> Content-Length: 74
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjA0MTczYWJiZGFlMjgyOTliYjNmOTkiLCJlbWFpbCI6Im1jZG9uYWxkQEVtYWlsLmNvbSIsImlhdCI6MTcxMTU0ODc0MiwiZXhwIjoxNzExNjM1MTQyfQ.p69GYeqFSmAxd7_ia4DNAdP4loqBRSHJNKO7F7Pr4GU
@@ -140,7 +140,7 @@ the reset password token supplied and updates the user password to the one suppl
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Login successful"}
 
 
@@ -160,8 +160,8 @@ information supplied in the *json* body after successfully authenticating and au
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNTc3OTM1LCJleHAiOjE3MTE2NjQzMzV9._7-fLbJu1tO7EnQp7TlCTKJqvZY9T47LQeBnEJcUOVU" -H "Content-Type: application/json" -d '{ "name": "PlayStation 6", "price": "$599.99", "quantity": 7, "description": "Have a good funtime in the comfort of your home with family and friends", "EDT": 1 }' "0.0.0.0:5000/api/admin/products/add" -v; echo ""
 	Note: Unnecessary use of -X or --request, POST is already inferred.
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> POST /api/admin/products/add HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -170,7 +170,7 @@ information supplied in the *json* body after successfully authenticating and au
 	> Content-Type: application/json
 	> Content-Length: 162
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 201 Created
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -180,7 +180,7 @@ information supplied in the *json* body after successfully authenticating and au
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"message":"New product added successfully","id":"66049d3f4e634d355316e9f2"}
 
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ echo 'db.products.find({ name: 'PlayStation 6' })' | mongosh e_commerce_website
@@ -205,8 +205,8 @@ supplied productId
 supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "color", "sizes", "category" }* 
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPATCH -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNTc3OTM1LCJleHAiOjE3MTE2NjQzMzV9._7-fLbJu1tO7EnQp7TlCTKJqvZY9T47LQeBnEJcUOVU" -H "Content-Type: application/json" -d '{ "quantity": 10 }' "0.0.0.0:5000/api/admin/products/66049d3f4e634d355316e9f2/edit" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> PATCH /api/admin/products/66049d3f4e634d355316e9f2/edit HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -215,7 +215,7 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 	> Content-Type: application/json
 	> Content-Length: 18
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -225,7 +225,7 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Item updated successfully"}
 
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ echo 'db.products.find({ name: "PlayStation 6" })' | mongosh e_commerce_website
@@ -242,8 +242,8 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 	]
 
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPATCH -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNTc3OTM1LCJleHAiOjE3MTE2NjQzMzV9._7-fLbJu1tO7EnQp7TlCTKJqvZY9T47LQeBnEJcUOVU" -H "Content-Type: application/json" -d '{ "quantity": 20 }' "0.0.0.0:5000/api/admin/products/66049d3f4e634d355316e9f2/edit" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> PATCH /api/admin/products/66049d3f4e634d355316e9f2/edit HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -252,7 +252,7 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 	> Content-Type: application/json
 	> Content-Length: 18
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -262,7 +262,7 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"message":"Item updated successfully"}
 
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ echo 'db.products.find({ name: "PlayStation 6" })' | mongosh e_commerce_website
@@ -283,15 +283,15 @@ supplied in the *json* *{ "name", "price", "quantity", "description", "EDT", "co
 and quantity should be passed via query to the parameters *productName* and *qty*
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPOST -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM" "0.0.0.0:5000/api/cart/add?productName=PlayStation+6&qty=2" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> POST /api/cart/add?productName=PlayStation+6&qty=2 HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
 	> Accept: */*
 	> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Set-Cookie: cart=%5B%7B%22id%22%3A%2266049d3f4e634d355316e9f2%22%2C%22name%22%3A%22PlayStation%206%22%2C%22price%22%3A%22%24599.99%22%2C%22EDT%22%3A1%2C%22qty%22%3A2%7D%5D; Path=/; Expires=Fri, 29 Mar 2024 03:40:30 GMT; HttpOnly
@@ -301,7 +301,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	< Keep-Alive: timeout=5
 	< Transfer-Encoding: chunked
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	Cart item added successfully
 
 
@@ -309,8 +309,8 @@ and quantity should be passed via query to the parameters *productName* and *qty
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XGET -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM" -b "cart=%5B%7B%22id%22%3A%2266049d3f4e634d355316e9f2%22%2C%22name%22%3A%22PlayStation%206%22%2C%22price%22%3A%22%24599.99%22%2C%22EDT%22%3A1%2C%22qty%22%3A2%7D%5D" "0.0.0.0:5000/api/cart" -v; echo ""
 	Note: Unnecessary use of -X or --request, GET is already inferred.
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> GET /api/cart HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -318,7 +318,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	> Cookie: cart=%5B%7B%22id%22%3A%2266049d3f4e634d355316e9f2%22%2C%22name%22%3A%22PlayStation%206%22%2C%22price%22%3A%22%24599.99%22%2C%22EDT%22%3A1%2C%22qty%22%3A2%7D%5D
 	> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -328,15 +328,15 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	[{"id":"66049d3f4e634d355316e9f2","name":"PlayStation 6","price":"$599.99","EDT":"Fri Mar 29 2024 05:45:29 GMT+0100 (West Africa Standard Time)","qty":2,"total":"$1199.98"}]
 
 
 - **/cart/remove (Method Type: DELETE)**: Removes an item from the users cart and updates the cart information.
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XDELETE -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM" -b "cart=%5B%7B%22id%22%3A%2265f96cd767fdfc4d76005491%22%2C%22name%22%3A%22Sandals%22%2C%22price%22%3A%22%247.99%22%2C%22qty%22%3A3%7D%5D" "0.0.0.0:5000/api/cart/remove?productName=Sandals" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> DELETE /api/cart/remove?productName=Sandals HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -344,7 +344,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	> Cookie: cart=%5B%7B%22id%22%3A%2265f96cd767fdfc4d76005491%22%2C%22name%22%3A%22Sandals%22%2C%22price%22%3A%22%247.99%22%2C%22qty%22%3A3%7D%5D
 	> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Set-Cookie: cart=%5B%5D; Path=/; Expires=Fri, 29 Mar 2024 11:52:41 GMT; HttpOnly
@@ -354,15 +354,15 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	< Keep-Alive: timeout=5
 	< Transfer-Encoding: chunked
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	Cart item removed successfully
 
 
 - **/cart/update (Method Type: PATCH)**: Updates the items in a users cart.
 ## Illustration:
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XPATCH -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM" -b "cart=%5B%7B%22id%22%3A%2265f96cd767fdfc4d76005491%22%2C%22name%22%3A%22Sandals%22%2C%22price%22%3A%22%247.99%22%2C%22qty%22%3A1%7D%5D" "0.0.0.0:5000/api/cart/update?productName=Sandals&qty=-3" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> PATCH /api/cart/update?productName=Sandals&qty=-3 HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -370,7 +370,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	> Cookie: cart=%5B%7B%22id%22%3A%2265f96cd767fdfc4d76005491%22%2C%22name%22%3A%22Sandals%22%2C%22price%22%3A%22%247.99%22%2C%22qty%22%3A1%7D%5D
 	> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NWZjMjliMmMxNGJmODdlNDNmYjVmN2YiLCJlbWFpbCI6ImJvYkBkeWxhbi5jb20iLCJpYXQiOjE3MTEzNjg4NDksImV4cCI6MTcxMTQ1NTI0OX0.geTOYPJUVmQdF6mUHM8pf7Cj6axI_Y-bSNTGKCx8lqM
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Set-Cookie: cart=%5B%5D; Path=/; Expires=Fri, 29 Mar 2024 12:13:52 GMT; HttpOnly
@@ -380,7 +380,7 @@ and quantity should be passed via query to the parameters *productName* and *qty
 	< Keep-Alive: timeout=5
 	< Transfer-Encoding: chunked
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	Cart item updated successfully
 
 - **/orders/checkout (GET)**: Checks out the items in a users cart, the callback attached to this
@@ -397,8 +397,8 @@ this endpoint has pagination functionality, hence the order history can be navig
 A *page* query parameter can be used to skip orders
 ## Illustration
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XGET -H "Content-Type: application/json" -d '{ "email": "adminEmail@admin.com", "password": "e-commerce-website18/03/24" }' -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNjM1NzMxLCJleHAiOjE3MTE3MjIxMzF9.BNZTFjp2O1uLP_MNZJ6UGyV66gD7AIsfedvgcG-rfNY" "0.0.0.0:5000/api/admin/orders" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> GET /api/admin/orders HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -407,7 +407,7 @@ A *page* query parameter can be used to skip orders
 	> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNjM1NzMxLCJleHAiOjE3MTE3MjIxMzF9.BNZTFjp2O1uLP_MNZJ6UGyV66gD7AIsfedvgcG-rfNY
 	> Content-Length: 77
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -425,8 +425,8 @@ A *page* query parameter can be used to skip orders
 corresponding to the orderId passed
 ## Illustration
 	lq-mcdonald@lqmcdonald-HP-EliteBook-840-G3:~/Documents/E-Commerce-Website$ curl -XGET -H "Content-Type: application/json" -d '{ "email": "adminEmail@admin.com", "password": "e-commerce-website18/03/24" }' -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNjM1NzMxLCJleHAiOjE3MTE3MjIxMzF9.BNZTFjp2O1uLP_MNZJ6UGyV66gD7AIsfedvgcG-rfNY" "0.0.0.0:5000/api/admin/orders/660563e89dd40962a5d77e55" -v; echo ""
-	\*   Trying 0.0.0.0:5000...
-	\* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
+	*   Trying 0.0.0.0:5000...
+	* Connected to 0.0.0.0 (127.0.0.1) port 5000 (#0)
 	> GET /api/admin/orders/660563e89dd40962a5d77e55 HTTP/1.1
 	> Host: 0.0.0.0:5000
 	> User-Agent: curl/7.85.0
@@ -435,7 +435,7 @@ corresponding to the orderId passed
 	> Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjAyYjRjNTQwMzY3NzNlZjFkODI2ZDUiLCJlbWFpbCI6ImFkbWluRW1haWxAYWRtaW4uY29tIiwiaWF0IjoxNzExNjM1NzMxLCJleHAiOjE3MTE3MjIxMzF9.BNZTFjp2O1uLP_MNZJ6UGyV66gD7AIsfedvgcG-rfNY
 	> Content-Length: 77
 	> 
-	\* Mark bundle as not supporting multiuse
+	* Mark bundle as not supporting multiuse
 	< HTTP/1.1 200 OK
 	< X-Powered-By: Express
 	< Content-Type: application/json; charset=utf-8
@@ -445,7 +445,7 @@ corresponding to the orderId passed
 	< Connection: keep-alive
 	< Keep-Alive: timeout=5
 	< 
-	\* Connection #0 to host 0.0.0.0 left intact
+	* Connection #0 to host 0.0.0.0 left intact
 	{"_id":"660563e89dd40962a5d77e55","item":"Sandals","units":4,"price":"$7.99","orderTime":"2024-03-28T12:34:48.400Z","deliveryTime":"1970-01-01T00:00:00.000Z","total":31.96}
 
 
