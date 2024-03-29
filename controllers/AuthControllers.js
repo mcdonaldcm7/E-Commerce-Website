@@ -45,7 +45,8 @@ export async function authenticateUser(req, res, next) {
       if (!['login'].includes(path)) {
         return next();
       }
-      return res.status(200).json({ message: 'Login successful' });
+      const message = user.role === 'admin' ? 'Admin Login Successful' : 'Login Successful';
+      return res.status(200).json({ message });
     }
     return res.status(401).json({ error: 'Incorrect Password' });
   } catch (err) {
