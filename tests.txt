@@ -1,0 +1,65 @@
+1. Create user.
+curl -XPOST -H "Content-Type: application/json" -d '{ "email": "john@nath.com", "password": "flexible164214" }' "0.0.0.0:5000/api/register"; echo ""
+
+2. login user
+curl -XPOST -H "Content-Type: application/json" -d '{ "email": "john@nath.com", "password": "flexible164214" }' "0.0.0.0:5000/api/login" -v; echo ""
+
+3. reset password
+curl -XGET -H "Content-Type: application/json" -d '{ "email": "john@nath.com", "password": "flexible164214" }' "0.0.0.0:5000/api/reset_password"; echo ""
+
+4. update password
+curl -XPATCH -H "Content-Type: application/json" -d '{ "email": "john@nath.com", "resetToken": "<RESET_TOKEN>", "newPassword": "newFlexiblePassword164214" }' "0.0.0.0:5000/api/update_password"; echo ""
+
+5. login user - (Fails)
+curl -XPOST -H "Content-Type: application/json" -d '{ "email": "john@nath.com", "password": "flexible164214" }' "0.0.0.0:5000/api/login"; echo ""
+
+6. login user - (Success)
+curl -XPOST -H "Content-Type: application/json" -d '{ "email": "john@nath.com", "password": "newFlexiblePassword164214" }' "0.0.0.0:5000/api/login" -v; echo ""
+
+7. product listing
+curl -XGET "0.0.0.0:5000/api/products"; echo ""
+
+8. get cart
+curl -XGET "0.0.0.0:5000/api/cart" -v; echo ""
+
+9. add item
+curl -XPOST "0.0.0.0:5000/api/cart/add?productName=<PRODUCT NAME>" -v; echo ""
+
+10. get cart
+curl -XGET -b "<CART>" "0.0.0.0:5000/api/cart" -v; echo ""
+
+11. remove item
+curl -XDELETE "0.0.0.0:5000/api/cart/remove?productName=<PRODUCT NAME>" -v; echo ""
+
+12. get cart
+curl -XGET -b "<CART>" "0.0.0.0:5000/api/cart" -v; echo ""
+
+13. update cart item
+curl -XPATCH -b "<CART>" "0.0.0.0:5000/api/update?productName=<PRODUCT NAME>&qty=<QUANTITY CHANGE>" -v; echo ""
+
+14. check users order history
+curl -XGET -H "<SESSION INFO>" "0.0.0.0:5000/api/users/orders" -v; echo ""
+
+15. orders checkout
+curl -XGET -H "<SESSION INFO>" -b "<CART>" "0.0.0.0:5000/api/orders/checkout" -v; echo ""
+
+14. check users order history
+curl -XGET -H "<SESSION INFO>" "0.0.0.0:5000/api/users/orders"; echo ""
+
+15. search for product by name
+curl -XGET "0.0.0.0:5000/api/products?productName=JoyStick"; echo ""
+
+16. login as admin
+curl -XPOST -H "Content-Type: application/json" -d '{ "email": "adminEmail@admin.com", "password": "e-commerce-website18/03/24" }' "0.0.0.0:5000/api/login" -v; echo "";
+
+17. add product
+curl -XPOST -H "Content-Type: application/json" -d '{ "name": "JoyStick", "price": "$6.99", "description": "Provides a seemless gaming experience", "quantity": 12, "EDT": 2 }' -H "<ADMIN SESSION INFO>" "0.0.0.0:5000/api/admin/products/add"; echo ""
+
+18. search product
+curl -XGET "0.0.0.0:5000/api/products?productName=JoyStick"; echo ""
+
+19. delete product
+curl -XDELETE -H "<ADMIN SESSION INFO>" "0.0.0.0:5000/api/products/<productID>/remove"; echo ""
+
+20. search product
+curl -XGET "0.0.0.0:5000/api/products?productName=JoyStick"; echo ""
